@@ -132,7 +132,6 @@ output application/json
     </flow>
     
     <flow name="get:\flights:american-flights-system-api-config">
-        <!-- TODO: Implement search by query params sent -->
         <flow-ref name="getFlights" />
     </flow>
     
