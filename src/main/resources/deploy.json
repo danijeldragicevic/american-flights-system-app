@@ -1,0 +1,10 @@
+{
+  "runtime": "4.4.0",
+  "workerSize": 0.1,
+  "applicationName": "american-flights-system-app",
+  "workers": 1,
+  "autoStart": true,
+  "properties": {
+    "env": "sandbox"
+  }
+}

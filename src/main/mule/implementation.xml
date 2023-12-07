@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:db="http://www.mulesoft.org/schema/mule/db" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+    http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+	http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+
+  <sub-flow name="getFlights">
+    <set-variable value="#[attributes.queryParams.'destination']" doc:name="destination" doc:id="qqxbvd" variableName="destination"/>
+    <choice doc:name="Empty destination?" doc:id="caykmk" >
+      <when expression='#[isEmpty(vars.destination)]' doc:name="YES" >
+        <db:select doc:name="All Flights" config-ref="Database_Config">
+          <db:sql>
+            <![CDATA[SELECT * FROM american]]>
+          </db:sql>
+        </db:select>
+      </when>
+      <otherwise doc:name="NO" >
+        <db:select doc:name="Flights by destination" config-ref="Database_Config">
+            <db:sql>
+              <![CDATA[SELECT * FROM american WHERE toAirport = :destination]]>
+            </db:sql>
+            <db:input-parameters>
+              #[{'destination' : vars.destination}]
+            </db:input-parameters>
+          </db:select>
+      </otherwise>
+    </choice>
+    <ee:transform doc:name="Map to Flights attributes" doc:id="51fed3-afee8c">
+      <ee:message>
+        <ee:set-payload>
+          <![CDATA[
+            %dw 2.0
+            output application/json
+            ---
+            payload map (item , index) -> {
+              ID: item.ID,
+              code: (item.code1 default "") ++ (item.code2 default ""),
+              price: item.price default 0,
+              departureDate: item.takeOffDate as String default "",
+              origin: item.fromAirport default "",
+              destination: item.toAirport default "",
+              emptySeats: item.seatsAvailable default 0,
+              plane: {
+                "type": item.planeType default "",
+                totalSeats: item.totalSeats default 0
+              }
+            }
+            ]]>
+        </ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="c214e9-31de67"/>
+  </sub-flow>
+
+  <sub-flow name="getFlightsById">
+    <set-variable value="#[attributes.uriParams.'ID']" doc:name="flightId" doc:id="qqxbvc" variableName="flightId"/>
+    <db:select doc:name="Select Flight by ID" config-ref="Database_Config">
+      <db:sql>
+        <![CDATA[SELECT * FROM american WHERE ID = :flightId]]>
+      </db:sql>
+      <db:input-parameters>
+        #[{'flightId' : vars.flightId}]
+      </db:input-parameters>
+    </db:select>
+    <ee:transform doc:name="Map to Flight attributes" doc:id="51fed3-afee8f">
+      <ee:message>
+        <ee:set-payload>
+          <![CDATA[
+          %dw 2.0
+          output application/json
+          ---
+          (payload map (item , index) -> {
+            ID: item.ID,
+            code: (item.code1 default "") ++ (item.code2 default ""),
+            price: item.price default 0,
+            departureDate: item.takeOffDate as String default "",
+            origin: item.fromAirport default "",
+            destination: item.toAirport default "",
+            emptySeats: item.seatsAvailable default 0,
+            plane: {
+              "type": item.planeType default "",
+              totalSeats: item.totalSeats default 0
+            }
+          })[0] default {}
+          ]]>
+        </ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <choice doc:name="Empty payload?" doc:id="yyqigg" >
+      <when expression='#[isEmpty(payload)]' doc:name="YES" >
+        <raise-error type="FLIGHTS:NOT_FOUND" doc:name="FLIGHTS:NOT_FOUND" doc:id="vklvte"/>
+      </when>
+      <otherwise doc:name="NO" >
+        <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="68d350-ef06c0"/>
+      </otherwise>
+    </choice>
+  </sub-flow>
+  
+  <sub-flow name="createFlight" >
+    <ee:transform doc:name="Create response" doc:id="dyvtvg" >
+      <ee:message >
+        <ee:set-payload doc:name="Set payload" doc:id="fkjums" ><![CDATA[
+          %dw 2.0
+          output application/json
+          ---
+          {
+            message: "Flight added (but not really)"
+          }
+          ]]>
+        </ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="472c1b-60b485"/>
+  </sub-flow>
+</mule>
