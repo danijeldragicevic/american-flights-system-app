@@ -1,7 +1,7 @@
 # Database_Config:
 db:
-  host: "mudb.learn.mulesoft.com"
+  host: "sql11.freesqldatabase.com"
   port: "3306"
-  database: "training"
-  user: "![EE3U0z5F1Kk=]"
-  password: "![EE3U0z5F1Kk=]"
+  user: "![b3mCTv+dsC7FlcD0Ua4Hhg==]"
+  password: "![0WQAqmBFxXqXogaGl+DYAQ==]"
+  database: "sql11668403"
