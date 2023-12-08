@@ -35,7 +35,7 @@
               ID: item.ID,
               code: (item.code1 default "") ++ (item.code2 default ""),
               price: item.price default 0,
-              departureDate: item.takeOffDate as Date as String{format: "yyyy/MM/dd"} default "",
+              departureDate: item.takeOffDate as Date as String{format: "yyyy-MM-dd"} default "",
               origin: item.fromAirport default "",
               destination: item.toAirport default "",
               emptySeats: item.seatsAvailable default 0,
@@ -53,7 +53,7 @@
 
   <sub-flow name="getFlightsById">
     <set-variable value="#[attributes.uriParams.'ID']" doc:name="flightId" doc:id="qqxbvc" variableName="flightId"/>
-    <db:select doc:name="Select Flight by ID" config-ref="Database_Config">
+    <db:select doc:name="Flight by ID" config-ref="Database_Config">
       <db:sql>
         <![CDATA[SELECT * FROM american WHERE ID = :flightId]]>
       </db:sql>
@@ -72,7 +72,7 @@
             ID: item.ID,
             code: (item.code1 default "") ++ (item.code2 default ""),
             price: item.price default 0,
-            departureDate: item.takeOffDate as Date as String{format: "yyyy/MM/dd"} default "",
+            departureDate: item.takeOffDate as Date as String{format: "yyyy-MM-dd"} default "",
             origin: item.fromAirport default "",
             destination: item.toAirport default "",
             emptySeats: item.seatsAvailable default 0,
@@ -96,6 +96,22 @@
   </sub-flow>
   
   <sub-flow name="createFlight" >
+    <db:insert config-ref="Database_Config" doc:name="New Flight" doc:id="wiakvq" >
+      <db:sql><![CDATA[
+        INSERT INTO american (code1, code2, price, takeOffDate, fromAirport, toAirport, seatsAvailable, planeType, totalSeats) 
+        VALUES (:code1, :code2, :price, :takeOffDate, :fromAirport, :toAirport, :seatsAvailable, :planeType, :totalSeats)]]></db:sql>
+        <db:input-parameters ><![CDATA[#[{
+          code1: payload.code[0 to 3],
+          code2: payload.code[4 to 7],
+          price: payload.price,
+          takeOffDate: payload.departureDate,
+          fromAirport: payload.origin,
+          toAirport: payload.destination,
+          seatsAvailable: payload.emptySeats,
+          planeType: payload.plane."type",
+          totalSeats: payload.plane.totalSeats  
+    }]]]></db:input-parameters>
+    </db:insert>
     <ee:transform doc:name="Create response" doc:id="dyvtvg" >
       <ee:message >
         <ee:set-payload doc:name="Set payload" doc:id="fkjums" ><![CDATA[
@@ -103,7 +119,7 @@
           output application/json
           ---
           {
-            message: "Flight added (but not really)"
+            message: "Flight successfully created"
           }
           ]]>
         </ee:set-payload>
