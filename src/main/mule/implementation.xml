@@ -4,8 +4,8 @@
 	http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 
   <sub-flow name="getFlights">
-    <set-variable value="#[attributes.queryParams.'destination']" doc:name="destination" doc:id="qqxbvd" variableName="destination"/>
-    <choice doc:name="Empty destination?" doc:id="caykmk" >
+    <set-variable value="#[attributes.queryParams.'destination']" doc:name="Read destination" doc:id="qqxbvd" variableName="destination"/>
+    <choice doc:name="Destination empty?" doc:id="caykmk" >
       <when expression='#[isEmpty(vars.destination)]' doc:name="YES" >
         <db:select doc:name="All Flights" config-ref="Database_Config">
           <db:sql>
@@ -52,7 +52,7 @@
   </sub-flow>
 
   <sub-flow name="getFlightsById">
-    <set-variable value="#[attributes.uriParams.'ID']" doc:name="flightId" doc:id="qqxbvc" variableName="flightId"/>
+    <set-variable value="#[attributes.uriParams.'ID']" doc:name="Read ID" doc:id="qqxbvc" variableName="flightId"/>
     <db:select doc:name="Flight by ID" config-ref="Database_Config">
       <db:sql>
         <![CDATA[SELECT * FROM american WHERE ID = :flightId]]>
@@ -85,9 +85,9 @@
         </ee:set-payload>
       </ee:message>
     </ee:transform>
-    <choice doc:name="Empty payload?" doc:id="yyqigg" >
+    <choice doc:name="Payload empty?" doc:id="yyqigg" >
       <when expression='#[isEmpty(payload)]' doc:name="YES" >
-        <raise-error type="FLIGHTS:NOT_FOUND" doc:name="FLIGHTS:NOT_FOUND" doc:id="vklvte"/>
+        <raise-error type="FLIGHT:NOT_FOUND" doc:name="FLIGHTS:NOT_FOUND" doc:id="vklvte"/>
       </when>
       <otherwise doc:name="NO" >
         <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="68d350-ef06c0"/>

@@ -29,7 +29,7 @@ output application/json
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
-            <on-error-propagate type="APIKIT:NOT_FOUND, FLIGHTS:NOT_FOUND">
+            <on-error-propagate type="APIKIT:NOT_FOUND, FLIGHT:NOT_FOUND">
                 <ee:transform doc:name="Transform Message">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
