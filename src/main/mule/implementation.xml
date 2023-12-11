@@ -51,6 +51,39 @@
     <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="c214e9-31de67"/>
   </sub-flow>
 
+  <sub-flow name="createFlight" >
+    <db:insert config-ref="Database_Config" doc:name="New Flight" doc:id="wiakvq" >
+      <db:sql><![CDATA[
+        INSERT INTO american (code1, code2, price, takeOffDate, fromAirport, toAirport, seatsAvailable, planeType, totalSeats) 
+        VALUES (:code1, :code2, :price, :takeOffDate, :fromAirport, :toAirport, :seatsAvailable, :planeType, :totalSeats)]]></db:sql>
+        <db:input-parameters ><![CDATA[#[{
+          code1: payload.code[0 to 3],
+          code2: payload.code[4 to 7],
+          price: payload.price,
+          takeOffDate: payload.departureDate,
+          fromAirport: payload.origin,
+          toAirport: payload.destination,
+          seatsAvailable: payload.emptySeats,
+          planeType: payload.plane."type",
+          totalSeats: payload.plane.totalSeats  
+    }]]]></db:input-parameters>
+    </db:insert>
+    <ee:transform doc:name="Create response" doc:id="dyvtvg" >
+      <ee:message >
+        <ee:set-payload doc:name="Set payload" doc:id="fkjums" ><![CDATA[
+          %dw 2.0
+          output application/json
+          ---
+          {
+            message: "Flight successfully created"
+          }
+          ]]>
+        </ee:set-payload>
+      </ee:message>
+    </ee:transform>
+    <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="472c1b-60b485"/>
+  </sub-flow>
+
   <sub-flow name="getFlightsById">
     <set-variable value="#[attributes.uriParams.'ID']" doc:name="Read ID" doc:id="qqxbvc" variableName="flightId"/>
     <db:select doc:name="Flight by ID" config-ref="Database_Config">
@@ -94,37 +127,30 @@
       </otherwise>
     </choice>
   </sub-flow>
-  
-  <sub-flow name="createFlight" >
-    <db:insert config-ref="Database_Config" doc:name="New Flight" doc:id="wiakvq" >
-      <db:sql><![CDATA[
-        INSERT INTO american (code1, code2, price, takeOffDate, fromAirport, toAirport, seatsAvailable, planeType, totalSeats) 
-        VALUES (:code1, :code2, :price, :takeOffDate, :fromAirport, :toAirport, :seatsAvailable, :planeType, :totalSeats)]]></db:sql>
-        <db:input-parameters ><![CDATA[#[{
-          code1: payload.code[0 to 3],
-          code2: payload.code[4 to 7],
-          price: payload.price,
-          takeOffDate: payload.departureDate,
-          fromAirport: payload.origin,
-          toAirport: payload.destination,
-          seatsAvailable: payload.emptySeats,
-          planeType: payload.plane."type",
-          totalSeats: payload.plane.totalSeats  
-    }]]]></db:input-parameters>
-    </db:insert>
-    <ee:transform doc:name="Create response" doc:id="dyvtvg" >
+
+  <sub-flow name="deleteFlightById">
+    <set-variable value="#[attributes.uriParams.'ID']" doc:name="Read ID" doc:id="qqxbve" variableName="flightId"/>
+    <db:delete doc:name="Flight by ID" config-ref="Database_Config">
+      <db:sql>
+        <![CDATA[DELETE FROM american WHERE ID = :flightId]]>
+      </db:sql>
+      <db:input-parameters>
+        #[{'flightId' : vars.flightId}]
+      </db:input-parameters>
+    </db:delete>
+    <ee:transform doc:name="Create response" doc:id="dyvtvh" >
       <ee:message >
-        <ee:set-payload doc:name="Set payload" doc:id="fkjums" ><![CDATA[
+        <ee:set-payload doc:name="Set payload" doc:id="fkjumo" ><![CDATA[
           %dw 2.0
           output application/json
           ---
           {
-            message: "Flight successfully created"
+            message: "Flight successfully deleted"
           }
           ]]>
         </ee:set-payload>
       </ee:message>
     </ee:transform>
-    <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="472c1b-60b485"/>
+    <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="472c1b-60b486"/>
   </sub-flow>
 </mule>
