@@ -155,19 +155,32 @@
   </sub-flow>
 
   <flow name="clearDatabase" >
-    <scheduler doc:name="Every 5 minutes" doc:id="hjelsy" >
+    <scheduler doc:name="Every 1 DAY" doc:id="hjelsy" >
 			<scheduling-strategy >
 				<fixed-frequency frequency="1" timeUnit="DAYS"/>
 			</scheduling-strategy>
 		</scheduler>
-    <db:delete doc:name="Delete all Flights" config-ref="Database_Config">
+    <db:execute-script doc:name="Drop table" config-ref="Database_Config" doc:id="nukosu" >
       <db:sql>
-        <![CDATA[DELETE FROM american]]>
+        <![CDATA[DROP TABLE IF EXISTS ${secure::db.database}.american]]>
       </db:sql>
-      <db:input-parameters>
-        #[{'flightId' : vars.flightId}]
-      </db:input-parameters>
-    </db:delete>
-    <logger level="INFO" message="Database automatically cleaned" doc:name="Log ino message" doc:id="b53842-b5c878"/>
+    </db:execute-script>
+    <db:execute-ddl doc:name="Create table" config-ref="Database_Config" doc:id="nukosc" >
+      <db:sql>
+        <![CDATA[CREATE TABLE american (
+            ID INT AUTO_INCREMENT PRIMARY KEY,
+            code1 VARCHAR(255),
+            code2 VARCHAR(255),
+            price DECIMAL(10, 2),
+            takeOffDate VARCHAR(255),
+            fromAirport VARCHAR(255),
+            toAirport VARCHAR(255),
+            seatsAvailable INT,
+            planeType VARCHAR(255),
+            totalSeats INT
+        )]]>
+      </db:sql>
+    </db:execute-ddl>
+    <logger level="INFO" message="Database created" doc:name="Log ino message" doc:id="b53842-b5c878"/>
   </flow>
 </mule>
