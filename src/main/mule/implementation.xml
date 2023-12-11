@@ -153,4 +153,21 @@
     </ee:transform>
     <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="472c1b-60b486"/>
   </sub-flow>
+
+  <flow name="clearDatabase" >
+    <scheduler doc:name="Every 5 minutes" doc:id="hjelsy" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="1" timeUnit="DAYS"/>
+			</scheduling-strategy>
+		</scheduler>
+    <db:delete doc:name="Delete all Flights" config-ref="Database_Config">
+      <db:sql>
+        <![CDATA[DELETE FROM american]]>
+      </db:sql>
+      <db:input-parameters>
+        #[{'flightId' : vars.flightId}]
+      </db:input-parameters>
+    </db:delete>
+    <logger level="INFO" message="Database automatically cleaned" doc:name="Log ino message" doc:id="b53842-b5c878"/>
+  </flow>
 </mule>
