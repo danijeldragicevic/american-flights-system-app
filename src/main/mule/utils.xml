@@ -8,9 +8,9 @@
 	http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
     
     <flow name="clearDatabase" >
-    <scheduler doc:name="Every 1 DAY" doc:id="hjelsy" >
+    <scheduler doc:name="At 05:00AM - UTC" doc:id="hjelsy" >
         <scheduling-strategy >
-            <fixed-frequency frequency="1" timeUnit="DAYS"/>
+            <cron expression="${secure::cleanup.frequency}" timeZone="${secure::cleanup.timezone}" />
         </scheduling-strategy>
     </scheduler>
     <try doc:name="Try" doc:id="mejiyh" >
@@ -35,7 +35,7 @@
                 )]]>
             </db:sql>
         </db:execute-ddl>
-        <logger level="INFO" message="New ${secure::db.database}.american table created" doc:name="Log info message" doc:id="b53842-b5c878"/>
+        <logger level="INFO" message="Old data purged. New ${secure::db.database}.american table created." doc:name="Log info message" doc:id="b53842-b5c878"/>
       <error-handler>
         <on-error-continue name="ANY" type="ANY">
           <logger doc:name="Log info message" doc:id="annmjk" message="There was some error during database cleanup. Will try again tomorrow."/>

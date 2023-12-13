@@ -5,3 +5,8 @@ db:
   user: "![b3mCTv+dsC7FlcD0Ua4Hhg==]"
   password: "![0WQAqmBFxXqXogaGl+DYAQ==]"
   database: "sql11668403"
+  
+# Cleanup_Scheduler_Config:
+cleanup: 
+  frequency: 0 0 5 1/1 * ? *
+  timezone: UTC
