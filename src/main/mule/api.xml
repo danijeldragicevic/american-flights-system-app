@@ -3,7 +3,7 @@
     <http:listener-config name="american-flights-system-api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="american-flights-system-api-config" api="resource::5ea4b9e3-519e-46df-b99c-456aad38e08c:american-flights-system-api:1.0.8:raml:zip:api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="american-flights-system-api-config" api="resource::5ea4b9e3-519e-46df-b99c-456aad38e08c:american-flights-system-api:1.0.13:raml:zip:api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="american-flights-system-api-main">
         <http:listener config-ref="american-flights-system-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -22,7 +22,7 @@
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Bad request"}]]></ee:set-payload>
+{erorr: "Bad request"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">400</ee:set-variable>
@@ -35,7 +35,7 @@ output application/json
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Resource not found"}]]></ee:set-payload>
+{erorr: "Resource not found"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">404</ee:set-variable>
@@ -48,7 +48,7 @@ output application/json
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Method not allowed"}]]></ee:set-payload>
+{erorr: "Method not allowed"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">405</ee:set-variable>
@@ -61,7 +61,7 @@ output application/json
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Not acceptable"}]]></ee:set-payload>
+{erorr: "Not acceptable"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">406</ee:set-variable>
@@ -74,7 +74,7 @@ output application/json
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Unsupported media type"}]]></ee:set-payload>
+{erorr: "Unsupported media type"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">415</ee:set-variable>
@@ -87,7 +87,7 @@ output application/json
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Not Implemented"}]]></ee:set-payload>
+{erorr: "Not Implemented"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">501</ee:set-variable>
@@ -114,7 +114,7 @@ output application/json
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Resource not found"}]]></ee:set-payload>
+{erorr: "Resource not found"}]]></ee:set-payload>
                     </ee:message>
                     <ee:variables>
                         <ee:set-variable variableName="httpStatus">404</ee:set-variable>
@@ -123,15 +123,22 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
+    <!-- GET: /api/flights -->
     <flow name="get:\flights:american-flights-system-api-config">
         <flow-ref name="getFlights" />
     </flow>
+    
+    <!-- POST: /api/flights -->
     <flow name="post:\flights:application\json:american-flights-system-api-config">
         <flow-ref name="createFlight" />
     </flow>
+    
+    <!-- GET: /api/flights/{ID} -->
     <flow name="get:\flights\(ID):american-flights-system-api-config">
-        <flow-ref name="getFlightsById" />
+        <flow-ref name="getFlightById" />
     </flow>
+    
+    <!-- DELETE: /api/flights/{ID} -->
     <flow name="delete:\flights\(ID):american-flights-system-api-config">
         <flow-ref name="deleteFlightById" />
     </flow>

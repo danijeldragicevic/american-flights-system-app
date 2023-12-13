@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+    xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+    xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+    http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+	http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+    
+    <flow name="clearDatabase" >
+    <scheduler doc:name="Every 1 DAY" doc:id="hjelsy" >
+        <scheduling-strategy >
+            <fixed-frequency frequency="1" timeUnit="DAYS"/>
+        </scheduling-strategy>
+    </scheduler>
+    <try doc:name="Try" doc:id="mejiyh" >
+        <db:execute-script doc:name="Drop table" config-ref="Database_Config" doc:id="nukosu" >
+            <db:sql>
+                <![CDATA[DROP TABLE IF EXISTS ${secure::db.database}.american]]>
+            </db:sql>
+        </db:execute-script>
+        <db:execute-ddl doc:name="Create table" config-ref="Database_Config" doc:id="nukosc" >
+            <db:sql>
+                <![CDATA[CREATE TABLE american (
+                    ID INT AUTO_INCREMENT PRIMARY KEY,
+                    code1 VARCHAR(255),
+                    code2 VARCHAR(255),
+                    price DECIMAL(10, 2),
+                    takeOffDate VARCHAR(255),
+                    fromAirport VARCHAR(255),
+                    toAirport VARCHAR(255),
+                    seatsAvailable INT,
+                    planeType VARCHAR(255),
+                    totalSeats INT
+                )]]>
+            </db:sql>
+        </db:execute-ddl>
+        <logger level="INFO" message="New ${secure::db.database}.american table created" doc:name="Log info message" doc:id="b53842-b5c878"/>
+      <error-handler>
+        <on-error-continue name="ANY" type="ANY">
+          <logger doc:name="Log info message" doc:id="annmjk" message="There was some error during database cleanup. Will try again tomorrow."/>
+        </on-error-continue>
+      </error-handler>
+    </try>    
+  </flow>
+</mule>

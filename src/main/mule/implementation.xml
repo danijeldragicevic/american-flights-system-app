@@ -84,7 +84,7 @@
     <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="472c1b-60b485"/>
   </sub-flow>
 
-  <sub-flow name="getFlightsById">
+  <sub-flow name="getFlightById">
     <set-variable value="#[attributes.uriParams.'ID']" doc:name="Read ID" doc:id="qqxbvc" variableName="flightId"/>
     <db:select doc:name="Flight by ID" config-ref="Database_Config">
       <db:sql>
@@ -120,7 +120,7 @@
     </ee:transform>
     <choice doc:name="Payload empty?" doc:id="yyqigg" >
       <when expression='#[isEmpty(payload)]' doc:name="YES" >
-        <raise-error type="FLIGHT:NOT_FOUND" doc:name="FLIGHTS:NOT_FOUND" doc:id="vklvte"/>
+        <raise-error type="FLIGHT:NOT_FOUND" doc:name="FLIGHT:NOT_FOUND" doc:id="vklvte"/>
       </when>
       <otherwise doc:name="NO" >
         <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="68d350-ef06c0"/>
@@ -153,34 +153,4 @@
     </ee:transform>
     <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="472c1b-60b486"/>
   </sub-flow>
-
-  <flow name="clearDatabase" >
-    <scheduler doc:name="Every 1 DAY" doc:id="hjelsy" >
-			<scheduling-strategy >
-				<fixed-frequency frequency="1" timeUnit="DAYS"/>
-			</scheduling-strategy>
-		</scheduler>
-    <db:execute-script doc:name="Drop table" config-ref="Database_Config" doc:id="nukosu" >
-      <db:sql>
-        <![CDATA[DROP TABLE IF EXISTS ${secure::db.database}.american]]>
-      </db:sql>
-    </db:execute-script>
-    <db:execute-ddl doc:name="Create table" config-ref="Database_Config" doc:id="nukosc" >
-      <db:sql>
-        <![CDATA[CREATE TABLE american (
-            ID INT AUTO_INCREMENT PRIMARY KEY,
-            code1 VARCHAR(255),
-            code2 VARCHAR(255),
-            price DECIMAL(10, 2),
-            takeOffDate VARCHAR(255),
-            fromAirport VARCHAR(255),
-            toAirport VARCHAR(255),
-            seatsAvailable INT,
-            planeType VARCHAR(255),
-            totalSeats INT
-        )]]>
-      </db:sql>
-    </db:execute-ddl>
-    <logger level="INFO" message="Database created" doc:name="Log ino message" doc:id="b53842-b5c878"/>
-  </flow>
 </mule>
