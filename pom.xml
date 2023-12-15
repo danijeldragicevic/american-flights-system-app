@@ -78,9 +78,15 @@
             <classifier>mule-plugin</classifier>
         </dependency>
         <dependency>
+            <groupId>com.mulesoft.services</groupId>
+            <artifactId>mule-service-weave-ee</artifactId>
+            <version>2.4.0-20221212</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>5ea4b9e3-519e-46df-b99c-456aad38e08c</groupId>
             <artifactId>american-flights-system-api</artifactId>
-            <version>1.0.13</version>
+            <version>1.0.19</version>
             <classifier>raml</classifier>
             <type>zip</type>
         </dependency>
@@ -97,12 +103,6 @@
             <version>1.7.1</version>
             <classifier>mule-plugin</classifier>
             <scope/>
-        </dependency>
-        <dependency>
-            <groupId>com.mulesoft.services</groupId>
-            <artifactId>mule-service-weave-ee</artifactId>
-            <version>2.4.0-20221212</version>
-            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>

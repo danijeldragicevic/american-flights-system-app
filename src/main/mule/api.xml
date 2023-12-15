@@ -3,7 +3,7 @@
     <http:listener-config name="american-flights-system-api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="american-flights-system-api-config" api="resource::5ea4b9e3-519e-46df-b99c-456aad38e08c:american-flights-system-api:1.0.13:raml:zip:api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="american-flights-system-api-config" api="resource::5ea4b9e3-519e-46df-b99c-456aad38e08c:american-flights-system-api:1.0.19:raml:zip:api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="american-flights-system-api-main">
         <http:listener config-ref="american-flights-system-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -127,17 +127,14 @@ output application/json
     <flow name="get:\flights:american-flights-system-api-config">
         <flow-ref name="getFlights" />
     </flow>
-    
     <!-- POST: /api/flights -->
     <flow name="post:\flights:application\json:american-flights-system-api-config">
         <flow-ref name="createFlight" />
     </flow>
-    
     <!-- GET: /api/flights/{ID} -->
     <flow name="get:\flights\(ID):american-flights-system-api-config">
         <flow-ref name="getFlightById" />
     </flow>
-    
     <!-- DELETE: /api/flights/{ID} -->
     <flow name="delete:\flights\(ID):american-flights-system-api-config">
         <flow-ref name="deleteFlightById" />
