@@ -143,7 +143,7 @@ Response: 200 OK
 ```
 
 # Error Handling
-Every endpoint can throw some of those errors. Please make sure to handle errors appropriately in your client application.
+Every endpoint can throw some of those errors:
 
 | Http Status | Content type   | Erorr body                          |
 |---------|--------------------|-------------------------------------|
