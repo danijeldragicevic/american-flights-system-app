@@ -1,4 +1,4 @@
-# American Flights System App (Demo for Blog Post)
+# American Flights System App (Demo)
 
 Welcome to the American Flights System App! <br>
 
