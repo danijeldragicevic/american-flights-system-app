@@ -10,11 +10,11 @@
 	http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
     
     <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config"
-        file="${env}.secure.yaml" 
+        file="${mule.env}.secure.yaml" 
         key="${encryption.key}" >
         <secure-properties:encrypt algorithm="Blowfish" />
     </secure-properties:config>
-    
+
     <db:config name="Database_Config" doc:name="mySQL DB">
         <db:my-sql-connection
             host="${secure::db.host}"

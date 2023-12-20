@@ -5,6 +5,6 @@
   "workers": 1,
   "autoStart": true,
   "properties": {
-    "env": "sandbox"
+    "env": "${mule.env}"
   }
 }
