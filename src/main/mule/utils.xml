@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-    xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:db="http://www.mulesoft.org/schema/mule/db"
-    xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:db="http://www.mulesoft.org/schema/mule/db" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
     http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 	http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
-    
-    <flow name="clearDatabase" >
-    <scheduler doc:name="At 05:00AM - UTC" doc:id="hjelsy" >
-        <scheduling-strategy >
-            <cron expression="${secure::cleanup.frequency}" timeZone="${secure::cleanup.timezone}" />
-        </scheduling-strategy>
-    </scheduler>
-    <try doc:name="Try" doc:id="mejiyh" >
-        <db:execute-script doc:name="Drop table" config-ref="Database_Config" doc:id="nukosu" >
-            <db:sql>
-                <![CDATA[DROP TABLE IF EXISTS ${secure::db.database}.american]]>
-            </db:sql>
-        </db:execute-script>
-        <db:execute-ddl doc:name="Create table" config-ref="Database_Config" doc:id="nukosc" >
-            <db:sql>
-                <![CDATA[CREATE TABLE american (
+
+    <flow name="initializeNewDatabase">
+        <scheduler doc:name="At 05:00AM (UTC)" doc:id="hjelsy">
+            <scheduling-strategy>
+                <cron expression="${secure::cleanup.frequency}" timeZone="${secure::cleanup.timezone}" />
+            </scheduling-strategy>
+        </scheduler>
+        <try doc:name="Try" doc:id="mejiyh">
+            <db:execute-script doc:name="Drop table" config-ref="Database_Config" doc:id="nukosu">
+                <db:sql>
+                    <![CDATA[DROP TABLE IF EXISTS ${secure::db.database}.american]]>
+                </db:sql>
+            </db:execute-script>
+            <db:execute-ddl doc:name="Create table" config-ref="Database_Config" doc:id="nukosc">
+                <db:sql>
+                    <![CDATA[CREATE TABLE american (
                     ID INT AUTO_INCREMENT PRIMARY KEY,
                     code1 VARCHAR(255),
                     code2 VARCHAR(255),
@@ -33,14 +29,33 @@
                     planeType VARCHAR(255),
                     totalSeats INT
                 )]]>
-            </db:sql>
-        </db:execute-ddl>
-        <logger level="INFO" message="Old data purged. New ${secure::db.database}.american table created." doc:name="Log info message" doc:id="b53842-b5c878"/>
-      <error-handler>
-        <on-error-continue name="ANY" type="ANY">
-          <logger doc:name="Log info message" doc:id="annmjk" message="There was some error during database cleanup. Will try again tomorrow."/>
-        </on-error-continue>
-      </error-handler>
-    </try>    
-  </flow>
+                </db:sql>
+            </db:execute-ddl>
+            <db:insert config-ref="Database_Config" doc:name="Create sample data" doc:id="wiakvf">
+                <db:sql>
+                    <![CDATA[
+                        INSERT INTO american (code1, code2, price, takeOffDate, fromAirport, toAirport, seatsAvailable, planeType, totalSeats) 
+                        VALUES 
+                            ('rree', '0001', 541.99, '2023-12-20', 'MUA', 'LAX', 0, 'Boeing 787', 200),
+                            ('eefd', '0123', 300.99, '2023-12-20', 'MUA', 'CLE', 7, 'Boeing 747', 345),
+                            ('ffee', '0192', 300.99, '2023-12-20', 'MUA', 'LAX', 0, 'Boeing 777', 300),
+                            ('rree', '1000', 200.99, '2023-12-20', 'MUA', 'CLE', 5, 'Boeing 737', 150),
+                            ('rree', '1093', 142.99, '2023-12-11', 'MUA', 'SFO', 1, 'Boeing 737', 150),
+                            ('ffee', '1112', 954.99, '2023-12-20', 'MUA', 'CLE', 100, 'Boeing 787', 200),
+                            ('eefd', '1994', 676.99, '2023-12-01', 'MUA', 'SFO', 0, 'Boeing 777', 300),
+                            ('ffee', '2000', 300.99, '2023-12-20', 'MUA', 'SFO', 30, 'Boeing 737', 150),
+                            ('eefd', '3000', 900.99, '2023-12-01', 'MUA', 'SFO', 0, 'Boeing 737', 150),
+                            ('eefd', '4511', 900.99, '2023-12-15', 'MUA', 'LAX', 100, 'Boeing 777', 300),
+                            ('rree', '4567', 456.99, '2016-01-20', 'MUA', 'SFO', 100, 'Boeing 737', 150)
+                    ]]>
+                </db:sql>
+            </db:insert>
+            <logger level="INFO" message="Old data was deleted from the database and replaced with new records." doc:name="Log info message" doc:id="b53842-b5c878" />
+            <error-handler>
+                <on-error-continue name="ANY" type="ANY">
+                    <logger doc:name="Log info message" doc:id="annmjk" message="There was some error during database cleanup. Will try again tomorrow." />
+                </on-error-continue>
+            </error-handler>
+        </try>
+    </flow>
 </mule>

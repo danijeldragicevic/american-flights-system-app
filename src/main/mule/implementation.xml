@@ -4,7 +4,7 @@
 	http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 
   <sub-flow name="getFlights">
-    <set-variable value="#[attributes.queryParams.'destination']" doc:name="Read destination" doc:id="qqxbvd" variableName="destination"/>
+    <set-variable value="#[attributes.queryParams.'destination']" doc:name="destination" doc:id="qqxbvd" variableName="destination"/>
     <choice doc:name="Destination empty?" doc:id="caykmk" >
       <when expression='#[isEmpty(vars.destination)]' doc:name="YES" >
         <db:select doc:name="All Flights" config-ref="Database_Config">
