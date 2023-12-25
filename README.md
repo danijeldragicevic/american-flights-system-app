@@ -181,6 +181,43 @@ Response: 201 Created
 }
 ```
 
+In case you get a Bed Request, please create your JSON body following this data structure:
+```
+#%RAML 1.0 DataType
+
+type: object
+properties: 
+    code:
+        type: string
+        pattern: '^[A-Za-z]{4}\d{4}$'
+    price:
+        type: number
+        minimum: 0
+        maximum: 999.99
+    departureDate:
+        type: date-only
+    origin:
+        type: string
+        minLength: 3
+        maxLength: 3
+    destination:
+        type: string
+        enum: ['SFO', 'LAX', 'CLE']
+    emptySeats:
+        type: integer
+        minimum: 0
+        maximum: 853
+    plane:
+        type: object
+        required: false
+        properties:
+            type: string
+            totalSeats:
+                type: integer
+                minimum: 1
+                maximum: 853
+```
+
 **Example 4:** GET /api/flights/1 <br>
 To get flight by ID.
 
