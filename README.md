@@ -133,6 +133,7 @@ Response: 200 OK
   }
 ]
 ```
+<br>
 
 **Example 2:** GET /api/flights?destination=SFO <br>
 To get flights by desired destination. <br>
@@ -156,6 +157,7 @@ Response: 200 OK
   }
 ]
 ```
+<br>
 
 **Example 3:** POST /api/flights <br>
 To create a flight.
@@ -217,6 +219,7 @@ properties:
                 minimum: 1
                 maximum: 853
 ```
+<br>
 
 **Example 4:** GET /api/flights/1 <br>
 To get flight by ID.
@@ -237,6 +240,7 @@ Resonse: 200 OK
   }
 }
 ```
+<br>
 
 **Example 5:** DELETE /api/flights/1 <br>
 To delete a specific flight.
@@ -247,6 +251,7 @@ Response: 200 OK
   "message": "Flight successfully deleted"
 }
 ```
+<br>
 
 # Error Handling
 Every endpoint can throw some of those errors:
