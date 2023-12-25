@@ -4,7 +4,7 @@ Welcome to the American Flights System App! <br>
 
 This Mule 4 application serves as implementation for the [American Flights System API](https://github.com/danijeldragicevic/american-flights-system-api), providing a way to interact with the collection of flights.
 
-Application have implemented scheduler, to cleanup the database every day at 05:00AM, UTC time.
+Application have implemented scheduler, to refresh the database every day at 05:00AM, UTC time.
 
 # Demo Disclaimer
 This application is a demo created for educational purposes and is associated with a blog post. It may not represent a fully functional or production-ready system. Please refer to the [blog post](https://www.example.com/blog-post) for insights into the concepts and use cases demonstrated.
@@ -13,16 +13,17 @@ This application is a demo created for educational purposes and is associated wi
 - Mule 4.4.0
 - MySQL database
 
-# To run application on Mule Standalone Runtime
+# To run application
+## 1. Change database credentials
 
 Applicaiton connects to the remote database by using the secured credentials. <br>
-To be able to build and deploy the application (on your local or remote environment), first you have to change database credentials with some of your own and encrypt them with your own encription key.
+To be able to run the application first you have to provide encryption key and change the database credentials accordingly.
 
 In order to achieve that, please follow instructions on this link: https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties
 
 In short:
 - download [Secure Properties Tool Jar file](https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties#:~:text=Secure%20Properties%20Tool%20Jar%20file.).
-- navigate to the directory where you downloaded it and run following command(s):
+- navigate to the directory where you downloaded it and run following command:
 ```
 java -cp secure-properties-tool.jar com.mulesoft.tools.SecurePropertiesTool \
 > string \
@@ -35,7 +36,9 @@ java -cp secure-properties-tool.jar com.mulesoft.tools.SecurePropertiesTool \
 The tool vill return encrypted value of your username and/or password (i.e. *b3mCTv+dsC7FlcD0Ua4Hhg==*). <br>
 To be able to use it in your application, put it between angle brackets started wit the exclamation mark (i.e. ![b3mCTv+dsC7FlcD0Ua4Hhg==]) in your **.secure.yaml* file.
 
-When this step is done, you can proceed further with configuring the Mule Runtime and deploying the app into it.
+When this step is done, you can proceed further, to run application on standalone or embeded Mule Runtime.
+
+## 2. Run on Mule Standalone Runtime
 
 First make sure that you have Mule Runtime installed and correctly configured on your machine (for details how to do it please see: https://docs.mulesoft.com/mule-runtime/latest/starting-and-stopping-mule-esb). <br>
 
@@ -44,14 +47,14 @@ In short:
 - configure `MULE_HOME` (*export MULE_HOME=/path/to/your/downloaded/mule-standalone-runtime*)
 - configure `PATH` (*export PATH=$PATH:$MULE_HOME/bin*)
 
-Second step is to build your application archive (`.jar`) file and copy to the /apps directory. <br>
+<br>
 
-In short:
-- navigate to the root directory of your project (*cd ~/Downloads/american-flights-system-app/*)
-- build the application (*mvn clean install*)
-- copy generated file (*cp target/american-flights-system-app-1.0.0-SNAPSHOT-mule-application.jar ~/path/to/your/downloaded/mule-standalone-runtime/apps*)
+Second step is to build your application archive (`.jar`) file and copy to the /apps directory: <br>
+- navigate to the root directory of your project (i.e. *cd ~/Downloads/american-flights-system-app/*)
+- build the application archive (*mvn clean install*)
+- copy generated file to the /apps (*cp target/american-flights-system-app-1.0.0-SNAPSHOT-mule-application.jar ~/path/to/your/downloaded/mule-standalone-runtime/apps*)
 
-Third step is to run Mule Runtime, by setting some specific VM arguments (the last two are actually yours):
+Last step is to run Mule Runtime, by setting some specific VM arguments (the last two are actually yours):
 - run the Mule Runtime (*mule deploy -M-Dmule.forceConsoleLog -M-Dmule.testingMode -M-XX:-UseBiasedLocking -M-Dfile.encoding=UTF-8 -M-XX:+UseG1GC -M-XX:+UseStringDeduplication -M-Dcom.ning.http.client.AsyncHttpClientConfig.useProxyProperties=true -M-Dmule.debugger.test.port=8000 -M-Dmule.debug.enable=true console0 -M-Dencryption.key=yourEncryptionKey -M-Denv=yourAppEnvironmentName*)
 
 As result you should se in the Console that Mule Runtime is up and running and your application successfully deployed:
@@ -76,16 +79,14 @@ INFO  2023-12-22 15:02:53,297 [[MuleRuntime].uber.01: [american-flights-system-a
 INFO  2023-12-22 15:02:53,297 [[MuleRuntime].uber.04: [american-flights-system-app-1.0.0-SNAPSHOT-mule-application].uber@org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource.lambda$reallyDoStart$17:462 @b69b951] [processor: ; event: ] org.mule.runtime.module.extension.internal.runtime.source.ExtensionMessageSource: Message source 'listener' on flow 'american-flights-system-api-main' successfully started
 ```
 
-# To run application with embeded Mule Runtime 
-If you don't want to bother with setting up the complete runtime engine, you can use some of the IDEs that MuleSoft offers. <br>
-There is well known Anypoint Studio and a new cloud-native one, Anypoint Code Builder (Beta). <br>
+## 3. Run on Embeded Mule Runtime 
+If you don't want to bother with setting up the runtime engine, you can use some of the free IDEs that MuleSoft offers. <br>
+There is well known [Anypoint Studio](https://www.mulesoft.com/platform/studio) and a new, cloud-native one - [Anypoint Code Builder (Beta)](https://www.mulesoft.com/platform/api/anypoint-code-builder). <br>
 
 They both comes with embeded runtime, so all you have to do is to import the project and run it. <br>
-Please, be aware that you still have to configure VM arguments that will be passed before the application starts.
+Please, be aware that you still have to configure VM arguments that will be passed before the application starts. <br>
 
-Both IDEs can be downloaded for free, following this link: https://www.mulesoft.com/lp/dl/anypoint-mule-studio 
-
-# Exposed endpoints:
+# To test the application
 By default, service will run on **http://localhost:8081** <br/>
 Following endpoints will be exposed:
 

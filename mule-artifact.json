@@ -1,4 +1,4 @@
 {
     "minMuleVersion": "4.4.0",
-    "secureProperties": ["encryption.key"]
+    "secureProperties": ["encryption.key", "mule.env"]
 }
