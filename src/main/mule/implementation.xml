@@ -85,7 +85,7 @@
   </sub-flow>
 
   <sub-flow name="getFlightById">
-    <set-variable value="#[attributes.uriParams.'ID']" doc:name="Read ID" doc:id="qqxbvc" variableName="flightId"/>
+    <set-variable value="#[attributes.uriParams.'ID']" doc:name="flightId" doc:id="qqxbvc" variableName="flightId"/>
     <db:select doc:name="Flight by ID" config-ref="Database_Config">
       <db:sql>
         <![CDATA[SELECT * FROM american WHERE ID = :flightId]]>
@@ -101,7 +101,7 @@
           %dw 2.0
           output application/json
           ---
-          (payload map (item , index) -> {
+          (payload as Array map (item , index) -> {
             ID: item.ID,
             code: (item.code1 default "") ++ (item.code2 default ""),
             price: item.price default 0,
@@ -123,9 +123,10 @@
         <raise-error type="FLIGHT:NOT_FOUND" doc:name="FLIGHT:NOT_FOUND" doc:id="vklvte"/>
       </when>
       <otherwise doc:name="NO" >
-        <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="68d350-ef06c0"/>
+        <set-payload value="#[payload]" doc:name="Set Output Payload" doc:id="da3cb6-b27147"/> 
       </otherwise>
     </choice>
+    
   </sub-flow>
 
   <sub-flow name="deleteFlightById">
