@@ -7,7 +7,7 @@ This Mule 4 application serves as implementation for the [American Flights Syste
 Application have implemented scheduler, to refresh the database every day at 05:00AM, UTC time.
 
 # Demo Disclaimer
-This application is a demo created for educational purposes and is associated with a blog post. It may not represent a fully functional or production-ready system. Please refer to the [blog post](https://www.example.com/blog-post) for insights into the concepts and use cases demonstrated.
+This application is a demo created for educational purposes and is associated with a blog post. It is not representing a fully functional or production-ready system. Please refer to the [blog post](https://www.example.com/blog-post) for insights into the concepts and use cases demonstrated.
 
 # Technology
 - Mule 4.4.0
@@ -266,7 +266,7 @@ Every endpoint can throw some of those errors:
 | 500     | application/json   | {"error": "Internal server error"}  |
 | 501     | application/json   | {"error": "Not implemented"}        |
 
-Feel free to explore the application and use the provided examples to understand how to interact with each endpoint. If you have any questions or issues, please refer to the API documentation or contact the API maintainers.
+Feel free to explore the application and use the provided examples to understand how to interact with each endpoint. If you have any questions or issues, please refer to the API documentation or contact the application maintainers.
 
 # Licence
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
