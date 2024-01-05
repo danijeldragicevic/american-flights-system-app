@@ -17,7 +17,7 @@ This application is a demo created for educational purposes and is associated wi
 ## 1. Change database credentials
 
 Applicaiton connects to the remote database by using the secured credentials. <br>
-To be able to run the application first you have to provide encryption key and change the database credentials accordingly.
+To be able to run the application first you have to provide encryption key and change the database configuration (URL, username, password) with some of your own.
 
 In order to achieve that, please follow instructions on this link: https://docs.mulesoft.com/mule-runtime/latest/secure-configuration-properties
 
