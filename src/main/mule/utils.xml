@@ -4,9 +4,9 @@
 	http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 
     <flow name="initializeNewDatabase">
-        <scheduler doc:name="At 05:00AM (UTC)" doc:id="hjelsy">
+        <scheduler doc:name="Scheduler" doc:id="hjelsy">
             <scheduling-strategy>
-                <cron expression="${secure::cleanup.frequency}" timeZone="${secure::cleanup.timezone}" />
+                <fixed-frequency frequency="10000" timeUnit="DAYS"/>
             </scheduling-strategy>
         </scheduler>
         <try doc:name="Try" doc:id="mejiyh">
