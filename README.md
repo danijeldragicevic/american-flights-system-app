@@ -4,8 +4,6 @@ Welcome to the American Flights System App! <br>
 
 This Mule 4 application serves as implementation for the [American Flights System API](https://github.com/danijeldragicevic/american-flights-system-api), providing a way to interact with the collection of flights.
 
-Application have implemented scheduler, to refresh the database every day at 05:00AM, UTC time.
-
 # Demo Disclaimer
 This application is a demo created for educational purposes and is associated with a blog post. It is not representing a fully functional or production-ready system. Please refer to the [blog post](https://www.example.com/blog-post) for insights into the concepts and use cases demonstrated.
 
