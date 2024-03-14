@@ -53,7 +53,7 @@ Second step is to build your application archive (`.jar`) file and copy to the /
 - copy generated file to the /apps (*cp target/american-flights-system-app-1.0.0-SNAPSHOT-mule-application.jar ~/path/to/your/downloaded/mule-standalone-runtime/apps*)
 
 Last step is to run Mule Runtime, by setting some specific VM arguments (the last two are actually yours):
-- run the Mule Runtime (*mule deploy -M-Dmule.forceConsoleLog -M-Dmule.testingMode -M-XX:-UseBiasedLocking -M-Dfile.encoding=UTF-8 -M-XX:+UseG1GC -M-XX:+UseStringDeduplication -M-Dcom.ning.http.client.AsyncHttpClientConfig.useProxyProperties=true -M-Dmule.debugger.test.port=8000 -M-Dmule.debug.enable=true console0 -M-Dencryption.key=yourEncryptionKey -M-Denv=yourAppEnvironmentName*)
+- run the Mule Runtime (*mule deploy -M-Dmule.forceConsoleLog -M-Dmule.testingMode -M-XX:-UseBiasedLocking -M-Dfile.encoding=UTF-8 -M-XX:+UseG1GC -M-XX:+UseStringDeduplication -M-Dcom.ning.http.client.AsyncHttpClientConfig.useProxyProperties=true -M-Dmule.debugger.test.port=8000 -M-Dmule.debug.enable=true console0 -M-Dencryption.key=yourEncryptionKey -M-Dmule.env=yourAppEnvironmentName*)
 
 As result you should se in the Console that Mule Runtime is up and running and your application successfully deployed:
 ```
